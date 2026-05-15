@@ -1,0 +1,8 @@
+{
+  "name": "school-campus-market",
+  "version": "1.0.0",
+  "description": "校园二手交易平台",
+  "dependencies": {
+    "@dcloudio/uni-ui": "^1.5.7"
+  }
+}

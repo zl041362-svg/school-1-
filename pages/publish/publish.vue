@@ -228,7 +228,7 @@ export default {
 					seller: {
 						id: 1,
 						nickname: '小明同学',
-						avatar: 'https://via.placeholder.com/100x100',
+						avatar: '/static/logo.png',
 						credit: 5,
 						soldCount: 12
 					},

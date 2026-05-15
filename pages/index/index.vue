@@ -97,7 +97,7 @@
 			</view>
 			
 			<view class="empty-container" v-else-if="goodsList.length === 0">
-				<image class="empty-image" src="https://via.placeholder.com/200x200/CCCCCC/999999?text=暂无商品" mode="aspectFit"></image>
+				<image class="empty-image" src="/static/logo.png" mode="aspectFit"></image>
 				<text class="empty-text">暂无商品</text>
 				<button class="empty-btn btn btn-primary btn-sm" @click="handleRefresh">刷新</button>
 			</view>
