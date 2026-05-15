@@ -2,13 +2,13 @@ export const mockNotices = [
 	{
 		id: 1,
 		title: '校园二手交易平台正式上线啦！',
-		content: '欢迎来到校园二手交易平台，在这里你可以轻松买卖二手商品�?,
+		content: '欢迎来到校园二手交易平台，在这里你可以轻松买卖二手商品。',
 		link: '/pages/faq/faq'
 	},
 	{
 		id: 2,
-		title: '新用户注册即�?0元优惠券',
-		content: '注册成为新用户，即可获得10元优惠券，满50元可用�?,
+		title: '新用户注册即送10元优惠券',
+		content: '注册成为新用户，即可获得10元优惠券，满50元可用。',
 		link: ''
 	},
 	{
@@ -23,7 +23,7 @@ export const mockBanners = [
 	{
 		id: 1,
 		image: '/static/logo.png',
-		title: '新用户注册�?0元优惠券',
+		title: '新用户注册送10元优惠券',
 		link: '/pages/faq/faq',
 		type: 'activity'
 	},
@@ -45,13 +45,13 @@ export const mockBanners = [
 
 export const mockHotSearch = [
 	'教材',
-	'笔记本电�?,
+	'笔记本电脑',
 	'手机',
 	'台灯',
-	'自行�?,
+	'自行车',
 	'耳机',
 	'键盘',
-	'显示�?
+	'显示器'
 ]
 
 export const mockCategories = [
@@ -100,12 +100,12 @@ export const mockCategories = [
 export const mockGoodsList = [
 	{
 		id: 1,
-		title: '高等数学第七�?同济大学出版�?,
+		title: '高等数学第七版 同济大学出版社',
 		price: 25.00,
 		originalPrice: 45.00,
 		image: '/static/logo.png',
 		categoryId: 2,
-		condition: '九成�?,
+		condition: '九成新',
 		delivery: '自提',
 		stock: 10,
 		seller: {
@@ -123,13 +123,13 @@ export const mockGoodsList = [
 	},
 	{
 		id: 2,
-		title: 'MacBook Pro 2020�?M1芯片',
+		title: 'MacBook Pro 2020款 M1芯片',
 		price: 5800.00,
 		originalPrice: 9299.00,
 		image: '/static/logo.png',
 		categoryId: 3,
 		condition: '九五成新',
-		delivery: '快�?,
+		delivery: '快递',
 		stock: 1,
 		seller: {
 			id: 2,
@@ -145,7 +145,7 @@ export const mockGoodsList = [
 	},
 	{
 		id: 3,
-		title: '小米台灯 1S 护眼�?,
+		title: '小米台灯 1S 护眼灯',
 		price: 45.00,
 		originalPrice: 129.00,
 		image: '/static/logo.png',
@@ -155,7 +155,7 @@ export const mockGoodsList = [
 		stock: 5,
 		seller: {
 			id: 3,
-			nickname: '生活�?,
+			nickname: '生活家',
 			avatar: '/static/logo.png',
 			credit: 4,
 			soldCount: 5
@@ -172,12 +172,12 @@ export const mockGoodsList = [
 		originalPrice: 5999.00,
 		image: '/static/logo.png',
 		categoryId: 3,
-		condition: '九成�?,
-		delivery: '快�?,
+		condition: '九成新',
+		delivery: '快递',
 		stock: 0,
 		seller: {
 			id: 4,
-			nickname: '数码爱好�?,
+			nickname: '数码爱好者',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 20
@@ -194,7 +194,7 @@ export const mockGoodsList = [
 		originalPrice: 35.00,
 		image: '/static/logo.png',
 		categoryId: 2,
-		condition: '八成�?,
+		condition: '八成新',
 		delivery: '自提',
 		stock: 3,
 		seller: {
@@ -211,17 +211,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 6,
-		title: '山地自行�?26�?,
+		title: '山地自行车 26寸',
 		price: 280.00,
 		originalPrice: 599.00,
 		image: '/static/logo.png',
 		categoryId: 5,
-		condition: '八成�?,
+		condition: '八成新',
 		delivery: '自提',
 		stock: 2,
 		seller: {
 			id: 6,
-			nickname: '骑行�?,
+			nickname: '骑行者',
 			avatar: '/static/logo.png',
 			credit: 4,
 			soldCount: 3
@@ -233,17 +233,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 7,
-		title: '线性代�?第五�?,
+		title: '线性代数 第五版',
 		price: 18.00,
 		originalPrice: 38.00,
 		image: '/static/logo.png',
 		categoryId: 2,
-		condition: '九成�?,
+		condition: '九成新',
 		delivery: '自提',
 		stock: 8,
 		seller: {
 			id: 7,
-			nickname: '数学爱好�?,
+			nickname: '数学爱好者',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 10
@@ -256,17 +256,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 8,
-		title: 'iPad Air 4 64GB WiFi�?,
+		title: 'iPad Air 4 64GB WiFi版',
 		price: 2800.00,
 		originalPrice: 4799.00,
 		image: '/static/logo.png',
 		categoryId: 3,
 		condition: '九五成新',
-		delivery: '快�?,
+		delivery: '快递',
 		stock: 1,
 		seller: {
 			id: 8,
-			nickname: '数码小王�?,
+			nickname: '数码小王子',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 6
@@ -279,13 +279,13 @@ export const mockGoodsList = [
 	},
 	{
 		id: 9,
-		title: 'Nike Air Max 270 42�?,
+		title: 'Nike Air Max 270 42码',
 		price: 320.00,
 		originalPrice: 899.00,
 		image: '/static/logo.png',
 		categoryId: 6,
-		condition: '九成�?,
-		delivery: '快�?,
+		condition: '九成新',
+		delivery: '快递',
 		stock: 1,
 		seller: {
 			id: 9,
@@ -301,17 +301,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 10,
-		title: '大学物理 上下�?,
+		title: '大学物理 上下册',
 		price: 30.00,
 		originalPrice: 68.00,
 		image: '/static/logo.png',
 		categoryId: 2,
-		condition: '八成�?,
+		condition: '八成新',
 		delivery: '自提',
 		stock: 4,
 		seller: {
 			id: 10,
-			nickname: '物理系学�?,
+			nickname: '物理系学长',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 18
@@ -328,8 +328,8 @@ export const mockGoodsList = [
 		originalPrice: 399.00,
 		image: '/static/logo.png',
 		categoryId: 3,
-		condition: '九成�?,
-		delivery: '快�?,
+		condition: '九成新',
+		delivery: '快递',
 		stock: 3,
 		seller: {
 			id: 11,
@@ -345,7 +345,7 @@ export const mockGoodsList = [
 	},
 	{
 		id: 12,
-		title: '瑜伽�?防滑加厚',
+		title: '瑜伽垫 防滑加厚',
 		price: 25.00,
 		originalPrice: 59.00,
 		image: '/static/logo.png',
@@ -367,17 +367,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 13,
-		title: '三体全集 刘慈�?,
+		title: '三体全集 刘慈欣',
 		price: 35.00,
 		originalPrice: 75.00,
 		image: '/static/logo.png',
 		categoryId: 7,
-		condition: '九成�?,
+		condition: '九成新',
 		delivery: '自提',
 		stock: 2,
 		seller: {
 			id: 13,
-			nickname: '科幻�?,
+			nickname: '科幻迷',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 14
@@ -396,7 +396,7 @@ export const mockGoodsList = [
 		image: '/static/logo.png',
 		categoryId: 8,
 		condition: '全新',
-		delivery: '快�?,
+		delivery: '快递',
 		stock: 1,
 		seller: {
 			id: 14,
@@ -413,17 +413,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 15,
-		title: 'C语言程序设计 谭浩�?,
+		title: 'C语言程序设计 谭浩强',
 		price: 20.00,
 		originalPrice: 45.00,
 		image: '/static/logo.png',
 		categoryId: 2,
-		condition: '九成�?,
+		condition: '九成新',
 		delivery: '自提',
 		stock: 7,
 		seller: {
 			id: 15,
-			nickname: '程序�?,
+			nickname: '程序员',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 22
@@ -435,17 +435,17 @@ export const mockGoodsList = [
 	},
 	{
 		id: 16,
-		title: '蓝牙耳机 降噪�?,
+		title: '蓝牙耳机 降噪版',
 		price: 150.00,
 		originalPrice: 299.00,
 		image: '/static/logo.png',
 		categoryId: 3,
 		condition: '九五成新',
-		delivery: '快�?,
+		delivery: '快递',
 		stock: 2,
 		seller: {
 			id: 16,
-			nickname: '音乐爱好�?,
+			nickname: '音乐爱好者',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 13
@@ -462,8 +462,8 @@ export const mockGoodsList = [
 		originalPrice: 599.00,
 		image: '/static/logo.png',
 		categoryId: 6,
-		condition: '八成�?,
-		delivery: '快�?,
+		condition: '八成新',
+		delivery: '快递',
 		stock: 1,
 		seller: {
 			id: 17,
@@ -484,7 +484,7 @@ export const mockGoodsList = [
 		originalPrice: 299.00,
 		image: '/static/logo.png',
 		categoryId: 5,
-		condition: '九成�?,
+		condition: '九成新',
 		delivery: '自提',
 		stock: 1,
 		seller: {
@@ -506,12 +506,12 @@ export const mockGoodsList = [
 		originalPrice: 55.00,
 		image: '/static/logo.png',
 		categoryId: 7,
-		condition: '九成�?,
+		condition: '九成新',
 		delivery: '自提',
 		stock: 3,
 		seller: {
 			id: 19,
-			nickname: '文学爱好�?,
+			nickname: '文学爱好者',
 			avatar: '/static/logo.png',
 			credit: 5,
 			soldCount: 19
@@ -529,7 +529,7 @@ export const mockGoodsList = [
 		image: '/static/logo.png',
 		categoryId: 8,
 		condition: '全新',
-		delivery: '快�?,
+		delivery: '快递',
 		stock: 1,
 		seller: {
 			id: 20,
@@ -561,7 +561,7 @@ export const mockCartList = [
 	{
 		id: 1,
 		goodsId: 1,
-		title: '高等数学第七�?同济大学出版�?,
+		title: '高等数学第七版 同济大学出版社',
 		price: 25.00,
 		image: '/static/logo.png',
 		quantity: 1,
@@ -570,7 +570,7 @@ export const mockCartList = [
 	{
 		id: 2,
 		goodsId: 3,
-		title: '小米台灯 1S 护眼�?,
+		title: '小米台灯 1S 护眼灯',
 		price: 45.00,
 		image: '/static/logo.png',
 		quantity: 1,
@@ -583,22 +583,22 @@ export const mockOrderList = {
 		{
 			id: '202312290001',
 			goodsId: 2,
-			title: 'MacBook Pro 2020�?M1芯片',
+			title: 'MacBook Pro 2020款 M1芯片',
 			price: 5800.00,
 			image: '/static/logo.png',
 			status: 'completed',
-			statusText: '已完�?,
+			statusText: '已完成',
 			quantity: 1,
 			orderTime: Date.now() - 86400000 * 3
 		},
 		{
 			id: '202312290002',
 			goodsId: 1,
-			title: '高等数学第七�?同济大学出版�?,
+			title: '高等数学第七版 同济大学出版社',
 			price: 25.00,
 			image: '/static/logo.png',
 			status: 'pending',
-			statusText: '待收�?,
+			statusText: '待收货',
 			quantity: 2,
 			orderTime: Date.now() - 86400000
 		},
@@ -609,7 +609,7 @@ export const mockOrderList = {
 			price: 150.00,
 			image: '/static/logo.png',
 			status: 'cancelled',
-			statusText: '已取�?,
+			statusText: '已取消',
 			quantity: 1,
 			orderTime: Date.now() - 86400000 * 2
 		}
@@ -622,7 +622,7 @@ export const mockOrderList = {
 			price: 3200.00,
 			image: '/static/logo.png',
 			status: 'completed',
-			statusText: '已完�?,
+			statusText: '已完成',
 			quantity: 1,
 			orderTime: Date.now() - 86400000 * 5
 		}
@@ -636,12 +636,12 @@ export const mockFAQList = [
 		questions: [
 			{
 				id: 1,
-				question: '如何购买商品�?,
-				answer: '1. 浏览商品列表或搜索商品\n2. 点击商品进入详情页\n3. 点击"加入购物�?或直接购买\n4. 确认订单信息\n5. 选择支付方式完成支付'
+				question: '如何购买商品？',
+				answer: '1. 浏览商品列表或搜索商品\n2. 点击商品进入详情页\n3. 点击"加入购物车"或直接购买\n4. 确认订单信息\n5. 选择支付方式完成支付'
 			},
 			{
 				id: 2,
-				question: '如何发布商品�?,
+				question: '如何发布商品？',
 				answer: '1. 进入"个人中心"\n2. 点击"发布商品"\n3. 上传商品图片\n4. 填写商品信息\n5. 设置价格和发货方式\n6. 提交审核'
 			}
 		]
@@ -653,12 +653,12 @@ export const mockFAQList = [
 			{
 				id: 3,
 				question: '商品与描述不符怎么办？',
-				answer: '收到商品后如发现与描述不符，请在3天内联系客服申请售后，我们会协助您与卖家协商解决�?
+				answer: '收到商品后如发现与描述不符，请在3天内联系客服申请售后，我们会协助您与卖家协商解决。'
 			},
 			{
 				id: 4,
-				question: '可以申请退款吗�?,
-				answer: '商品未发货前可以申请退款；已发货但未签收的，可以申请拦截；已签收的商品，如存在质量问题可申请退款�?
+				question: '可以申请退款吗？',
+				answer: '商品未发货前可以申请退款；已发货但未签收的，可以申请拦截；已签收的商品，如存在质量问题可申请退款。'
 			}
 		]
 	},
@@ -668,13 +668,13 @@ export const mockFAQList = [
 		questions: [
 			{
 				id: 5,
-				question: '如何修改密码�?,
-				answer: '进入"个人中心"�?设置"�?账号安全"�?修改密码"，按照提示完成密码修改�?
+				question: '如何修改密码？',
+				answer: '进入"个人中心"→"设置"→"账号安全"→"修改密码"，按照提示完成密码修改。'
 			},
 			{
 				id: 6,
-				question: '如何进行校园认证�?,
-				answer: '进入"个人中心"�?编辑资料"�?校园认证"，上传学生证或校园卡照片，等待审核通过即可�?
+				question: '如何进行校园认证？',
+				answer: '进入"个人中心"→"编辑资料"→"校园认证"，上传学生证或校园卡照片，等待审核通过即可。'
 			}
 		]
 	},
@@ -684,13 +684,13 @@ export const mockFAQList = [
 		questions: [
 			{
 				id: 7,
-				question: '什么是信誉等级�?,
-				answer: '信誉等级是根据用户的交易记录、评价情况等综合计算的，等级越高代表用户信誉越好�?
+				question: '什么是信誉等级？',
+				answer: '信誉等级是根据用户的交易记录、评价情况等综合计算的，等级越高代表用户信誉越好。'
 			},
 			{
 				id: 8,
-				question: '如何提升信誉等级�?,
-				answer: '多完成交易、获得好评、及时发货、诚信经营都可以提升信誉等级�?
+				question: '如何提升信誉等级？',
+				answer: '多完成交易、获得好评、及时发货、诚信经营都可以提升信誉等级。'
 			}
 		]
 	}
