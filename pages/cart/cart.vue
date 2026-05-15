@@ -382,7 +382,8 @@ export default {
 .page {
 	min-height: 100vh;
 	background-color: #F5F5F5;
-	padding-bottom: 120rpx;
+		padding-bottom: calc(120rpx + constant(safe-area-inset-bottom));
+		padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
 .cart-list {
@@ -558,6 +559,8 @@ export default {
 	justify-content: space-between;
 	background-color: #FFFFFF;
 	padding: 20rpx;
+	padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
+	padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 	box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 	
 	.bar-left {

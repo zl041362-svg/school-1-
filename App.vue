@@ -20,6 +20,38 @@
 		font-size: 28rpx;
 		color: #333333;
 		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior: none;
+	}
+	
+	view, text, image, scroll-view, swiper, swiper-item, button, input, textarea {
+		box-sizing: border-box;
+		-webkit-tap-highlight-color: transparent;
+		tap-highlight-color: transparent;
+	}
+	
+	input, textarea {
+		-webkit-appearance: none;
+		appearance: none;
+		font-size: 16px !important;
+	}
+	
+	/* 安全区域适配 */
+	.safe-area-top {
+		padding-top: constant(safe-area-inset-top);
+		padding-top: env(safe-area-inset-top);
+	}
+	
+	.safe-area-bottom {
+		padding-bottom: constant(safe-area-inset-bottom);
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+	
+	/* 底部固定栏安全区域 */
+	.fixed-bottom-safe {
+		padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
+		padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 	}
 	
 	.container {
@@ -139,12 +171,30 @@
 		box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
 	}
 	
+	.card:active {
+		opacity: 0.85;
+	}
+	
 	.btn {
 		padding: 16rpx 32rpx;
 		border-radius: 8rpx;
 		font-size: 28rpx;
 		text-align: center;
 		transition: all 0.3s;
+		min-height: 80rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+	}
+	
+	.btn::after {
+		border: none;
+	}
+	
+	.btn:active {
+		opacity: 0.8;
+		transform: scale(0.97);
 	}
 	
 	.btn-primary {
@@ -171,11 +221,13 @@
 	.btn-sm {
 		padding: 8rpx 16rpx;
 		font-size: 24rpx;
+		min-height: 56rpx;
 	}
 	
 	.btn-lg {
 		padding: 24rpx 48rpx;
 		font-size: 32rpx;
+		min-height: 96rpx;
 	}
 	
 	.tag {
@@ -222,5 +274,23 @@
 	.empty-text {
 		color: #999999;
 		font-size: 28rpx;
+	}
+	
+	/* 页面过渡动画 */
+	.page-enter-active {
+		transition: opacity 0.3s, transform 0.3s;
+	}
+	
+	.page-leave-active {
+		transition: opacity 0.3s;
+	}
+	
+	.page-enter-from {
+		opacity: 0;
+		transform: translateX(30rpx);
+	}
+	
+	.page-leave-to {
+		opacity: 0;
 	}
 </style>
