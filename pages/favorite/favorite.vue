@@ -2,7 +2,7 @@
 	<view class="page">
 		<view class="favorite-list">
 			<view class="favorite-item card" v-for="item in favoriteList" :key="item.id">
-				<image class="goods-image" :src="item.image" mode="aspectFill" @click="goToDetail(item.id)"></image>
+				<image lazy-load class="goods-image" :src="item.image" mode="aspectFill" @click="goToDetail(item.id)"></image>
 				<view class="goods-info">
 					<view class="goods-title" @click="goToDetail(item.id)">{{ item.title }}</view>
 					<view class="goods-tags">
@@ -90,6 +90,10 @@ export default {
 	display: flex;
 	margin-bottom: 20rpx;
 	position: relative;
+	
+	&:active {
+		opacity: 0.85;
+	}
 	
 	.goods-image {
 		width: 180rpx;

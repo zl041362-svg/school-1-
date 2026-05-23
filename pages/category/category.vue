@@ -13,19 +13,23 @@
 				</view>
 			</scroll-view>
 			<scroll-view class="category-content" scroll-y :bounces="false">
-				<view class="goods-grid">
+				<view class="goods-grid" v-if="goodsList.length > 0">
 					<view
 						class="goods-card"
 						v-for="item in goodsList"
 						:key="item.id"
 						@click="goToDetail(item.id)"
 					>
-						<image class="goods-image" :src="item.image" mode="aspectFill"></image>
+						<image lazy-load class="goods-image" :src="item.image" mode="aspectFill"></image>
 						<view class="goods-info">
 							<view class="goods-title">{{ item.title }}</view>
 							<view class="goods-price">¥{{ item.price.toFixed(2) }}</view>
 						</view>
 					</view>
+				</view>
+				<view v-else class="empty-state">
+					<text class="empty-icon">📂</text>
+					<text class="empty-text">该分类暂无商品</text>
 				</view>
 			</scroll-view>
 		</view>
@@ -70,13 +74,13 @@ export default {
 
 <style lang="scss" scoped>
 .page {
-	height: 100vh;
+	min-height: 100vh;
 	background-color: #F5F5F5;
 }
 
 .category-section {
 	display: flex;
-	height: 100vh;
+	height: calc(100vh - 120rpx);
 }
 
 .category-sidebar {
@@ -89,6 +93,10 @@ export default {
 		color: #666666;
 		text-align: center;
 		border-left: 6rpx solid transparent;
+		
+		&:active {
+			background-color: #EEEEEE;
+		}
 		
 		&.active {
 			background-color: #FFFFFF;
@@ -117,6 +125,10 @@ export default {
 		border-radius: 8rpx;
 		overflow: hidden;
 		box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+		
+		&:active {
+			opacity: 0.85;
+		}
 		
 		.goods-image {
 			width: 100%;

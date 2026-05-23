@@ -191,6 +191,10 @@ export default {
 		padding: 30rpx 20rpx;
 		border-bottom: 1rpx solid #EEEEEE;
 		
+		&:active {
+			background-color: #FAFAFA;
+		}
+		
 		&:last-child {
 			border-bottom: none;
 		}

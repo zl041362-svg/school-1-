@@ -6,7 +6,7 @@
 		<template v-else>
 		<swiper class="media-swiper" :indicator-dots="true" :autoplay="false" :circular="true">
 			<swiper-item v-for="(item, index) in goodsDetail.images" :key="index">
-				<image class="media-image" :src="item" mode="aspectFill" @click="previewImage(index)"></image>
+				<image lazy-load class="media-image" :src="item" mode="aspectFill" @click="previewImage(index)"></image>
 			</swiper-item>
 		</swiper>
 		
@@ -27,7 +27,7 @@
 		
 		<view class="seller-card card">
 			<view class="seller-header">
-				<image class="avatar" :src="goodsDetail.seller.avatar" mode="aspectFill"></image>
+				<image lazy-load class="avatar" :src="goodsDetail.seller.avatar" mode="aspectFill"></image>
 				<view class="seller-info">
 					<view class="nickname">{{ goodsDetail.seller.nickname }}</view>
 					<view class="credit">
@@ -67,7 +67,7 @@
 					:key="item.id"
 					@click="goToDetail(item.id)"
 				>
-					<image class="recommend-image" :src="item.image" mode="aspectFill"></image>
+					<image lazy-load class="recommend-image" :src="item.image" mode="aspectFill"></image>
 					<view class="recommend-info">
 						<view class="recommend-title">{{ item.title }}</view>
 						<view class="recommend-price">¥{{ item.price.toFixed(2) }}</view>
@@ -218,7 +218,7 @@ export default {
 
 .media-swiper {
 	width: 100%;
-	height: 750rpx;
+	height: 500rpx;
 	background-color: #FFFFFF;
 	
 	.media-image {
@@ -434,9 +434,15 @@ export default {
 			align-items: center;
 			margin-right: 30rpx;
 			position: relative;
+			padding: 10rpx 0;
+			min-height: 72rpx;
+			
+			&:active {
+				opacity: 0.7;
+			}
 			
 			.bar-text {
-				font-size: 20rpx;
+				font-size: 24rpx;
 				color: #999999;
 				margin-top: 4rpx;
 			}

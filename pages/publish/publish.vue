@@ -2,19 +2,22 @@
 	<view class="page">
 		<view class="form-section card">
 			<view class="form-item">
-				<text class="form-label">商品标题</text>
+				<text class="form-label"><text class="required">*</text>商品标题</text>
 				<input class="form-input" v-model="formData.title" placeholder="请输入商品标题" />
 			</view>
+			<view class="form-error" v-if="errors.title">{{ errors.title }}</view>
 			<view class="form-item">
-				<text class="form-label">商品分类</text>
+				<text class="form-label"><text class="required">*</text>商品分类</text>
 				<picker mode="selector" :range="categories" range-key="name" @change="handleCategoryChange">
-					<view class="picker-value">{{ formData.categoryName || '请选择分类' }}</view>
+					<view class="picker-value" :class="{ placeholder: !formData.categoryName }">{{ formData.categoryName || '请选择分类' }}</view>
 				</picker>
 			</view>
+			<view class="form-error" v-if="errors.category">{{ errors.category }}</view>
 			<view class="form-item">
-				<text class="form-label">商品价格</text>
+				<text class="form-label"><text class="required">*</text>商品价格</text>
 				<input class="form-input" v-model="formData.price" type="digit" placeholder="请输入价格" />
 			</view>
+			<view class="form-error" v-if="errors.price">{{ errors.price }}</view>
 			<view class="form-item">
 				<text class="form-label">原价</text>
 				<input class="form-input" v-model="formData.originalPrice" type="digit" placeholder="请输入原价" />
@@ -41,7 +44,7 @@
 			<view class="section-title">商品图片</view>
 			<view class="upload-list">
 				<view class="upload-item" v-for="(item, index) in formData.images" :key="index">
-					<image class="upload-image" :src="item" mode="aspectFill"></image>
+					<image lazy-load class="upload-image" :src="item" mode="aspectFill"></image>
 					<view class="delete-btn" @click="removeImage(index)">
 						<uni-icons type="close" size="20" color="#FFFFFF"></uni-icons>
 					</view>
@@ -82,6 +85,7 @@ export default {
 			categories: mockCategories.slice(1),
 			conditions: ['全新', '九五成新', '九成新', '八五成新', '八成新', '七成新', '六成新及以下'],
 			deliveries: ['自提', '快递', '自提或快递'],
+			errors: {},
 			formData: {
 				title: '',
 				categoryId: '',
@@ -150,55 +154,36 @@ export default {
 			this.formData.images.splice(index, 1)
 		},
 		handleSubmit() {
+			this.errors = {}
+			let valid = true
+			
 			if (!this.formData.title.trim()) {
-				uni.showToast({
-					title: '请输入商品标题',
-					icon: 'none'
-				})
-				return
+				this.errors.title = '请输入商品标题'
+				valid = false
 			}
 			if (!this.formData.categoryId) {
-				uni.showToast({
-					title: '请选择商品分类',
-					icon: 'none'
-				})
-				return
+				this.errors.category = '请选择商品分类'
+				valid = false
 			}
-			if (!this.formData.price) {
-				uni.showToast({
-					title: '请输入商品价格',
-					icon: 'none'
-				})
-				return
-			}
-			if (!this.formData.stock || this.formData.stock <= 0) {
-				uni.showToast({
-					title: '请输入有效的库存数量',
-					icon: 'none'
-				})
-				return
+			if (!this.formData.price || parseFloat(this.formData.price) <= 0) {
+				this.errors.price = '请输入有效价格'
+				valid = false
 			}
 			if (!this.formData.condition) {
-				uni.showToast({
-					title: '请选择商品成色',
-					icon: 'none'
-				})
-				return
+				uni.showToast({ title: '请选择商品成色', icon: 'none' })
+				valid = false
 			}
 			if (!this.formData.delivery) {
-				uni.showToast({
-					title: '请选择发货方式',
-					icon: 'none'
-				})
-				return
+				uni.showToast({ title: '请选择发货方式', icon: 'none' })
+				valid = false
 			}
 			if (this.formData.images.length === 0) {
-				uni.showToast({
-					title: '请上传商品图片',
-					icon: 'none'
-				})
-				return
+				uni.showToast({ title: '请上传商品图片', icon: 'none' })
+				valid = false
 			}
+			if (!valid) return
+			if (!valid) return
+			
 			if (!this.formData.description.trim()) {
 				uni.showToast({
 					title: '请输入商品描述',
@@ -302,7 +287,22 @@ export default {
 			flex: 1;
 			font-size: 28rpx;
 			color: #333333;
+			
+			&.placeholder {
+				color: #CCCCCC;
+			}
 		}
+	}
+	
+	.form-error {
+		font-size: 22rpx;
+		color: #F44336;
+		padding: 0 0 10rpx 150rpx;
+	}
+	
+	.required {
+		color: #F44336;
+		margin-right: 4rpx;
 	}
 }
 
@@ -333,12 +333,12 @@ export default {
 				border-radius: 8rpx;
 			}
 			
-			.delete-btn {
-				position: absolute;
-				top: -10rpx;
-				right: -10rpx;
-				width: 40rpx;
-				height: 40rpx;
+		.delete-btn {
+			position: absolute;
+			top: -10rpx;
+			right: -10rpx;
+			width: 56rpx;
+			height: 56rpx;
 				background-color: rgba(0, 0, 0, 0.6);
 				border-radius: 50%;
 				display: flex;

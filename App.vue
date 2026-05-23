@@ -75,6 +75,10 @@
 	}
 	
 	.text-muted {
+		color: #777777;
+	}
+	
+	.text-muted-light {
 		color: #999999;
 	}
 	
@@ -221,13 +225,18 @@
 	.btn-sm {
 		padding: 8rpx 16rpx;
 		font-size: 24rpx;
-		min-height: 56rpx;
+		min-height: 72rpx;
 	}
 	
 	.btn-lg {
 		padding: 24rpx 48rpx;
 		font-size: 32rpx;
 		min-height: 96rpx;
+	}
+	
+	.btn:disabled {
+		opacity: 0.4;
+		transform: none;
 	}
 	
 	.tag {
@@ -267,7 +276,7 @@
 	
 	.empty-icon {
 		font-size: 120rpx;
-		color: #CCCCCC;
+		color: #AAAAAA;
 		margin-bottom: 20rpx;
 	}
 	
@@ -288,9 +297,9 @@
 			text-align: center;
 			font-size: 26rpx;
 			color: #666666;
-			padding: 10rpx 0;
+			padding: 14rpx 0;
 			position: relative;
-			min-height: 48rpx;
+			min-height: 64rpx;
 			
 			&.active {
 				color: #4CAF50;

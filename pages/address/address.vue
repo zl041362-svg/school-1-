@@ -128,13 +128,13 @@ export default {
 					margin-right: 15rpx;
 				}
 				
-				.default-tag {
-					padding: 2rpx 8rpx;
-					background-color: #FF5722;
-					color: #FFFFFF;
-					font-size: 20rpx;
-					border-radius: 4rpx;
-				}
+			.default-tag {
+				padding: 2rpx 8rpx;
+				background-color: #FF5722;
+				color: #FFFFFF;
+				font-size: 22rpx;
+				border-radius: 4rpx;
+			}
 			}
 			
 			.address-actions {

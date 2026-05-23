@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="user-header">
-			<image class="avatar" :src="userInfo.avatar" mode="aspectFill" @click="goToProfile"></image>
+			<image lazy-load class="avatar" :src="userInfo.avatar" mode="aspectFill" @click="goToProfile"></image>
 			<view class="user-info">
 				<view class="nickname">{{ userInfo.nickname }}</view>
 				<view class="phone">{{ userInfo.phone }}</view>
@@ -56,7 +56,7 @@
 			<view class="menu-item" @click="goToMessage">
 				<uni-icons type="chatbubble" size="24" color="#00BCD4"></uni-icons>
 				<text class="menu-text">消息通知</text>
-				<uni-badge text="3" absolute="true" :offset="[10, 0]" size="small"></uni-badge>
+				<uni-badge :text="messageCount" absolute="true" :offset="[10, 0]" size="small"></uni-badge>
 				<uni-icons type="right" size="16" color="#CCCCCC"></uni-icons>
 			</view>
 			<view class="menu-item" @click="goToSetting">
@@ -75,16 +75,23 @@ import storage from '@/utils/storage.js'
 export default {
 	data() {
 		return {
-			userInfo: mockUserInfo
+			userInfo: mockUserInfo,
+			messageCount: 0
 		}
 	},
 	onLoad() {
 		this.loadUserInfo()
+		this.loadMessageCount()
 	},
 	onShow() {
 		this.loadUserInfo()
+		this.loadMessageCount()
 	},
 	methods: {
+		loadMessageCount() {
+			const messages = storage.getStorage('message_list') || []
+			this.messageCount = messages.filter(m => !m.read).length
+		},
 		loadUserInfo() {
 			const saved = storage.getStorage(storage.STORAGE_KEYS.USER_INFO)
 			this.userInfo = saved || mockUserInfo
@@ -167,6 +174,9 @@ export default {
 			color: #FFFFFF;
 			font-weight: bold;
 			margin-bottom: 10rpx;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		
 		.phone {
@@ -181,7 +191,7 @@ export default {
 		align-items: center;
 		
 		.credit-label {
-			font-size: 22rpx;
+			font-size: 24rpx;
 			color: rgba(255, 255, 255, 0.8);
 			margin-bottom: 8rpx;
 		}
@@ -199,6 +209,10 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		
+		&:active {
+			opacity: 0.7;
+		}
 		
 		.stat-value {
 			font-size: 36rpx;
@@ -223,6 +237,10 @@ export default {
 		align-items: center;
 		padding: 30rpx 0;
 		border-bottom: 1rpx solid #EEEEEE;
+		
+		&:active {
+			background-color: #FAFAFA;
+		}
 		
 		&:last-child {
 			border-bottom: none;

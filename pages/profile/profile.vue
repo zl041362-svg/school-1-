@@ -2,7 +2,7 @@
 	<view class="page">
 		<view class="avatar-section">
 			<view class="avatar-wrapper" @click="chooseAvatar">
-				<image class="avatar" :src="formData.avatar" mode="aspectFill"></image>
+				<image lazy-load class="avatar" :src="formData.avatar" mode="aspectFill"></image>
 				<view class="avatar-tip">点击更换</view>
 			</view>
 		</view>

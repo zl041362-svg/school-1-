@@ -9,7 +9,7 @@
 						color="#4CAF50"
 						:disabled="item.invalid"
 					></checkbox>
-					<image class="goods-image" :src="item.image" mode="aspectFill" @click="goToDetail(item.goodsId)"></image>
+					<image lazy-load class="goods-image" :src="item.image" mode="aspectFill" @click="goToDetail(item.goodsId)"></image>
 				</view>
 				<view class="item-right">
 					<view class="goods-title" @click="goToDetail(item.goodsId)">{{ item.title }}</view>
@@ -19,7 +19,7 @@
 					<view class="goods-bottom">
 						<text class="goods-price">¥{{ item.price.toFixed(2) }}</text>
 						<view class="quantity-control" v-if="!item.invalid">
-							<button class="quantity-btn" @click="changeQuantity(item, -1)">-</button>
+							.button class="quantity-btn" @click="changeQuantity(item, -1)" :disabled="item.quantity <= 1">-</button>
 							<text class="quantity">{{ item.quantity }}</text>
 							<button class="quantity-btn" @click="changeQuantity(item, 1)">+</button>
 						</view>
@@ -53,7 +53,7 @@
 							:key="item.id"
 							@click="goToDetail(item.id)"
 						>
-							<image class="recommend-image" :src="item.image" mode="aspectFill"></image>
+							<image lazy-load class="recommend-image" :src="item.image" mode="aspectFill"></image>
 							<view class="recommend-info">
 								<view class="recommend-title">{{ item.title }}</view>
 								<view class="recommend-price">¥{{ item.price.toFixed(2) }}</view>
@@ -82,7 +82,7 @@
 					<text class="total-price">¥{{ totalPrice.toFixed(2) }}</text>
 					<uni-icons type="info" size="16" color="#999999"></uni-icons>
 				</view>
-				<button class="checkout-btn btn btn-primary" @click="handleCheckout">
+				<button class="checkout-btn btn btn-primary" @click="handleCheckout" :disabled="selectedCount === 0">
 					结算({{ selectedCount }})
 				</button>
 			</view>
@@ -448,8 +448,8 @@ export default {
 				align-items: center;
 				
 				.quantity-btn {
-					width: 50rpx;
-					height: 50rpx;
+					width: 72rpx;
+					height: 72rpx;
 					padding: 0;
 					font-size: 28rpx;
 					display: flex;
@@ -478,6 +478,12 @@ export default {
 				display: flex;
 				align-items: center;
 				margin-left: 30rpx;
+				padding: 10rpx 0;
+				min-height: 72rpx;
+				
+				&:active {
+					opacity: 0.7;
+				}
 				
 				.action-text {
 					font-size: 24rpx;
@@ -515,6 +521,10 @@ export default {
 		border-radius: 8rpx;
 		overflow: hidden;
 		box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+		
+		&:active {
+			opacity: 0.85;
+		}
 		
 		&:last-child {
 			margin-right: 0;
@@ -637,6 +647,10 @@ export default {
 			border-radius: 12rpx;
 			margin-bottom: 20rpx;
 			
+			&:active {
+				opacity: 0.85;
+			}
+			
 			&.selected {
 				border: 2rpx solid #4CAF50;
 			}
@@ -665,11 +679,11 @@ export default {
 					}
 				}
 				
-				.coupon-condition {
-					font-size: 22rpx;
-					color: rgba(255, 255, 255, 0.9);
-					margin-top: 8rpx;
-				}
+			.coupon-condition {
+				font-size: 24rpx;
+				color: rgba(255, 255, 255, 0.9);
+				margin-top: 8rpx;
+			}
 			}
 			
 			.coupon-right {
@@ -683,10 +697,10 @@ export default {
 					margin-bottom: 8rpx;
 				}
 				
-				.coupon-time {
-					font-size: 22rpx;
-					color: rgba(255, 255, 255, 0.8);
-				}
+			.coupon-time {
+				font-size: 24rpx;
+				color: rgba(255, 255, 255, 0.8);
+			}
 			}
 		}
 		

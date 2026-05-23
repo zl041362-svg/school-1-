@@ -40,13 +40,15 @@
 		{
 			"path": "pages/favorite/favorite",
 			"style": {
-				"navigationBarTitleText": "我的收藏"
+				"navigationBarTitleText": "我的收藏",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/publish/publish",
 			"style": {
-				"navigationBarTitleText": "发布商品"
+				"navigationBarTitleText": "发布商品",
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -59,7 +61,8 @@
 		{
 			"path": "pages/address/address",
 			"style": {
-				"navigationBarTitleText": "地址管理"
+				"navigationBarTitleText": "地址管理",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -71,7 +74,8 @@
 		{
 			"path": "pages/message/message",
 			"style": {
-				"navigationBarTitleText": "消息通知"
+				"navigationBarTitleText": "消息通知",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

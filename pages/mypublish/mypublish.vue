@@ -64,7 +64,7 @@
 			<view class="published-item card" v-for="item in filteredList" :key="item.id" v-else>
 				<view class="published-header">
 					<view class="goods-info">
-						<image class="goods-image" :src="item.image" mode="aspectFill" @click="goToDetail(item.id)"></image>
+						<image lazy-load class="goods-image" :src="item.image" mode="aspectFill" @click="goToDetail(item.id)"></image>
 						<view class="info-right">
 							<view class="goods-title" @click="goToDetail(item.id)">{{ item.title }}</view>
 							<view class="goods-tags">
@@ -464,11 +464,11 @@ export default {
 					}
 				}
 				
-				.goods-stats {
-					display: flex;
-					align-items: center;
-					font-size: 22rpx;
-					color: #999999;
+			.goods-stats {
+				display: flex;
+				align-items: center;
+				font-size: 24rpx;
+				color: #777777;
 					
 					.divider {
 						margin: 0 10rpx;

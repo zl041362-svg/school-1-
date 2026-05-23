@@ -2,7 +2,7 @@
 	<view class="page">
 		<swiper class="banner-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" circular @change="handleBannerChange">
 			<swiper-item v-for="banner in banners" :key="banner.id">
-				<image class="banner-image" :src="banner.image" mode="aspectFill" @click="handleBannerClick(banner)"></image>
+				<image lazy-load class="banner-image" :src="banner.image" mode="aspectFill" @click="handleBannerClick(banner)"></image>
 			</swiper-item>
 		</swiper>
 		
@@ -50,7 +50,7 @@
 					:key="category.id"
 					@click="handleCategoryChange({ currentIndex: index })"
 				>
-					<image class="category-icon" :src="category.icon" mode="aspectFit"></image>
+					<image lazy-load class="category-icon" :src="category.icon" mode="aspectFit"></image>
 					<text class="category-name">{{ category.name }}</text>
 				</view>
 			</scroll-view>
@@ -78,7 +78,7 @@
 			</view>
 			<scroll-view class="hot-goods-scroll" scroll-x="true" show-scrollbar="false" :bounces="false">
 				<view class="hot-goods-item" v-for="item in hotGoodsList" :key="item.id" @click="goToDetail(item.id)">
-					<image class="hot-goods-image" :src="item.image" mode="aspectFill"></image>
+					<image lazy-load class="hot-goods-image" :src="item.image" mode="aspectFill"></image>
 					<view class="hot-goods-info">
 						<text class="hot-goods-title">{{ item.title }}</text>
 						<view class="hot-goods-meta">
@@ -97,7 +97,7 @@
 			</view>
 			
 			<view class="empty-container" v-else-if="goodsList.length === 0">
-				<image class="empty-image" src="/static/logo.png" mode="aspectFit"></image>
+				<image lazy-load class="empty-image" src="/static/logo.png" mode="aspectFit"></image>
 				<text class="empty-text">暂无商品</text>
 				<button class="empty-btn btn btn-primary btn-sm" @click="handleRefresh">刷新</button>
 			</view>
@@ -109,7 +109,7 @@
 						@click="handleSwipeClick($event, item)"
 					>
 						<view class="goods-item" @click="goToDetail(item.id)">
-							<image class="goods-image" :src="item.image" mode="aspectFill"></image>
+							<image lazy-load class="goods-image" :src="item.image" mode="aspectFill"></image>
 							<view class="goods-info">
 								<view class="goods-title">
 									<text v-if="item.isNew" class="new-tag">NEW</text>
@@ -194,6 +194,7 @@ export default {
 			currentCategoryIndex: 0,
 			sortType: 'new',
 			goodsList: [],
+			allGoodsList: [],
 			hotGoodsList: [],
 			isLoading: false,
 			page: 1,
@@ -232,7 +233,8 @@ export default {
 			this.banners = mockBanners
 			this.hotSearchTags = mockHotSearch
 			this.mockCategories = mockCategories
-			this.goodsList = mockGoodsList
+			this.allGoodsList = [...mockGoodsList]
+			this.goodsList = this.allGoodsList.slice(0, this.pageSize)
 			this.hotGoodsList = mockGoodsList.filter(item => item.viewCount > 100).slice(0, 5)
 			this.faqList = mockFAQList
 			setTimeout(() => {
@@ -299,12 +301,15 @@ export default {
 		},
 		filterGoodsByKeyword(keyword) {
 			if (!keyword.trim()) {
-				this.goodsList = mockGoodsList
-				return
+				this.allGoodsList = [...mockGoodsList]
+			} else {
+				this.allGoodsList = mockGoodsList.filter(item =>
+					item.title.toLowerCase().includes(keyword.toLowerCase())
+				)
 			}
-			this.goodsList = mockGoodsList.filter(item =>
-				item.title.toLowerCase().includes(keyword.toLowerCase())
-			)
+			this.page = 1
+			this.loadMoreStatus = 'more'
+			this.goodsList = this.allGoodsList.slice(0, this.pageSize)
 		},
 		handleCategoryChange(e) {
 			this.currentCategoryIndex = e.currentIndex
@@ -335,9 +340,17 @@ export default {
 		},
 		loadGoodsList() {
 			setTimeout(() => {
-				this.loadMoreStatus = 'noMore'
+				const start = (this.page - 1) * this.pageSize
+				const end = start + this.pageSize
+				const newItems = this.allGoodsList.slice(start, end)
+				if (this.page === 1) {
+					this.goodsList = newItems
+				} else {
+					this.goodsList = [...this.goodsList, ...newItems]
+				}
+				this.loadMoreStatus = end >= this.allGoodsList.length ? 'noMore' : 'more'
 				this.isLoading = false
-			}, 1000)
+			}, 300)
 		},
 		handleSwipeClick(e, item) {
 			if (e.index === 0) {
@@ -363,6 +376,8 @@ export default {
 			uni.showToast({
 				title: list.includes(item.id) ? '已收藏' : '已取消收藏',
 				icon: 'none'
+			})
+		},
 		saveViewHistory(item) {
 			let viewHistory = storage.getStorage(storage.STORAGE_KEYS.VIEW_HISTORY) || []
 			viewHistory = viewHistory.filter(viewItem => viewItem.goodsId !== item.id)
@@ -433,11 +448,18 @@ export default {
 		gap: 15rpx;
 		
 		.search-tag {
-			padding: 10rpx 20rpx;
+			padding: 14rpx 24rpx;
 			background-color: #F5F5F5;
 			color: #666666;
 			font-size: 24rpx;
 			border-radius: 20rpx;
+			min-height: 64rpx;
+			display: inline-flex;
+			align-items: center;
+			
+			&:active {
+				background-color: #E8E8E8;
+			}
 		}
 	}
 }
@@ -456,6 +478,10 @@ export default {
 			align-items: center;
 			margin-right: 30rpx;
 			transition: all 0.3s;
+			
+			&:active {
+				opacity: 0.8;
+			}
 			
 			&:last-child {
 				margin-right: 0;
@@ -503,6 +529,11 @@ export default {
 		font-size: 26rpx;
 		color: #666666;
 		position: relative;
+		padding: 14rpx 0;
+		
+		&:active {
+			opacity: 0.8;
+		}
 		
 		&.active {
 			color: #4CAF50;
@@ -542,20 +573,28 @@ export default {
 		
 		.section-more {
 			font-size: 24rpx;
-			color: #999999;
+			color: #777777;
+			
+			&:active {
+				opacity: 0.7;
+			}
 		}
 	}
 	
 	.hot-goods-scroll {
 		white-space: nowrap;
 		
-		.hot-goods-item {
-			display: inline-block;
-			width: 280rpx;
-			margin-right: 20rpx;
-			position: relative;
+	.hot-goods-item {
+		display: inline-block;
+		width: 280rpx;
+		margin-right: 20rpx;
+		position: relative;
 			
-			&:last-child {
+		&:active {
+			opacity: 0.85;
+		}
+			
+		&:last-child {
 				margin-right: 0;
 			}
 			
@@ -589,24 +628,24 @@ export default {
 						font-weight: bold;
 					}
 					
-					.hot-views {
-						font-size: 22rpx;
-						color: #999999;
-					}
+		.hot-views {
+			font-size: 24rpx;
+			color: #777777;
+		}
 				}
 			}
 			
-			.hot-tag {
-				position: absolute;
-				top: 10rpx;
-				left: 10rpx;
-				padding: 4rpx 12rpx;
-				background-color: #FF5722;
-				color: #FFFFFF;
-				font-size: 20rpx;
-				border-radius: 4rpx;
-				font-weight: bold;
-			}
+		.hot-tag {
+			position: absolute;
+			top: 10rpx;
+			left: 10rpx;
+			padding: 4rpx 12rpx;
+			background-color: #FF5722;
+			color: #FFFFFF;
+			font-size: 22rpx;
+			border-radius: 4rpx;
+			font-weight: bold;
+		}
 		}
 	}
 }
@@ -650,6 +689,10 @@ export default {
 	border-bottom: 1rpx solid #EEEEEE;
 	position: relative;
 	
+	&:active {
+		background-color: #FAFAFA;
+	}
+	
 	.goods-image {
 		width: 180rpx;
 		height: 180rpx;
@@ -673,25 +716,25 @@ export default {
 			-webkit-line-clamp: 2;
 			overflow: hidden;
 			
-			.new-tag {
-				display: inline-block;
-				padding: 2rpx 8rpx;
-				background-color: #FF5722;
-				color: #FFFFFF;
-				font-size: 20rpx;
-				border-radius: 4rpx;
-				margin-right: 8rpx;
-			}
-			
-			.hot-tag {
-				display: inline-block;
-				padding: 2rpx 8rpx;
-				background-color: #FF9800;
-				color: #FFFFFF;
-				font-size: 20rpx;
-				border-radius: 4rpx;
-				margin-right: 8rpx;
-			}
+		.new-tag {
+			display: inline-block;
+			padding: 2rpx 8rpx;
+			background-color: #FF5722;
+			color: #FFFFFF;
+			font-size: 22rpx;
+			border-radius: 4rpx;
+			margin-right: 8rpx;
+		}
+		
+		.hot-tag {
+			display: inline-block;
+			padding: 2rpx 8rpx;
+			background-color: #FF9800;
+			color: #FFFFFF;
+			font-size: 22rpx;
+			border-radius: 4rpx;
+			margin-right: 8rpx;
+		}
 		}
 		
 		.goods-tags {
@@ -721,7 +764,7 @@ export default {
 		
 		.goods-meta {
 			font-size: 24rpx;
-			color: #999999;
+			color: #777777;
 			margin-top: 10rpx;
 			
 			.divider {

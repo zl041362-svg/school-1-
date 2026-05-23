@@ -46,7 +46,7 @@
 					<text class="order-status" :class="'status-' + item.status">{{ item.statusText }}</text>
 				</view>
 				<view class="order-content" @click="goToDetail(item)">
-					<image class="goods-image" :src="item.image" mode="aspectFill"></image>
+					<image lazy-load class="goods-image" :src="item.image" mode="aspectFill"></image>
 					<view class="goods-info">
 						<view class="goods-title">{{ item.title }}</view>
 						<view class="goods-price">¥{{ item.price.toFixed(2) }}</view>
@@ -374,6 +374,10 @@ export default {
 	.order-content {
 		display: flex;
 		margin-bottom: 20rpx;
+		
+		&:active {
+			opacity: 0.85;
+		}
 		
 		.goods-image {
 			width: 160rpx;
