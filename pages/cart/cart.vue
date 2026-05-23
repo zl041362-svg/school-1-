@@ -19,7 +19,7 @@
 					<view class="goods-bottom">
 						<text class="goods-price">¥{{ item.price.toFixed(2) }}</text>
 						<view class="quantity-control" v-if="!item.invalid">
-							.button class="quantity-btn" @click="changeQuantity(item, -1)" :disabled="item.quantity <= 1">-</button>
+							<button class="quantity-btn" @click="changeQuantity(item, -1)" :disabled="item.quantity <= 1">-</button>
 							<text class="quantity">{{ item.quantity }}</text>
 							<button class="quantity-btn" @click="changeQuantity(item, 1)">+</button>
 						</view>
