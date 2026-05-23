@@ -5,7 +5,11 @@ const STORAGE_KEYS = {
 	CART: 'cart',
 	FAVORITE: 'favorite',
 	ADDRESS: 'address',
-	NOTICE_CLOSED: 'noticeClosed'
+	NOTICE_CLOSED: 'noticeClosed',
+	VIEW_HISTORY: 'viewHistory',
+	ORDER_LIST: 'userOrderList',
+	GOODS_LIST: 'userGoodsList',
+	SETTINGS: 'userSettings'
 }
 
 const setStorage = (key, data) => {

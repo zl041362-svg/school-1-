@@ -238,7 +238,7 @@ export default {
 					publishTime: Date.now()
 				}
 				
-				let userGoodsList = storage.getStorage('user_goods_list') || []
+				let userGoodsList = storage.getStorage(storage.STORAGE_KEYS.GOODS_LIST) || []
 				
 				if (this.isEditMode) {
 					const index = userGoodsList.findIndex(item => item.id === this.editId)
@@ -249,7 +249,7 @@ export default {
 					userGoodsList.unshift(goodsData)
 				}
 				
-				storage.setStorage('user_goods_list', userGoodsList)
+				storage.setStorage(storage.STORAGE_KEYS.GOODS_LIST, userGoodsList)
 				
 				uni.showToast({
 					title: this.isEditMode ? '保存成功' : '发布成功',
@@ -269,7 +269,8 @@ export default {
 	min-height: 100vh;
 	background-color: #F5F5F5;
 	padding: 20rpx;
-	padding-bottom: 120rpx;
+		padding-bottom: calc(120rpx + constant(safe-area-inset-bottom));
+		padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
 .form-section {
@@ -399,7 +400,9 @@ export default {
 	left: 0;
 	right: 0;
 	background-color: #FFFFFF;
-		padding: 20rpx;
+	padding: 20rpx;
+	padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
+	padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 	box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
 	
 	.submit-btn {

@@ -1,5 +1,9 @@
 <template>
 	<view class="page">
+		<view v-if="!goodsDetail.id" class="loading-state">
+			<text class="loading-text">加载中...</text>
+		</view>
+		<template v-else>
 		<swiper class="media-swiper" :indicator-dots="true" :autoplay="false" :circular="true">
 			<swiper-item v-for="(item, index) in goodsDetail.images" :key="index">
 				<image class="media-image" :src="item" mode="aspectFill" @click="previewImage(index)"></image>
@@ -89,12 +93,15 @@
 				<button class="action-btn btn btn-primary" @click="handleBuyNow">立即购买</button>
 			</view>
 		</view>
-	</view>
+	</template>
+</view>
 </template>
 
 <script>
 import { mockGoodsList } from '@/mock/index.js'
 import storage from '@/utils/storage.js'
+import { addToCart, getCartCount } from '@/utils/cart.js'
+import { isFavorite, toggleFavorite as toggleFav } from '@/utils/favorite.js'
 
 export default {
 	data() {
@@ -108,7 +115,7 @@ export default {
 	},
 	computed: {
 		discount() {
-			if (!this.goodsDetail.originalPrice || this.goodsDetail.originalPrice === 0) {
+			if (!this.goodsDetail.originalPrice || !this.goodsDetail.price || this.goodsDetail.originalPrice === 0) {
 				return '无'
 			}
 			return Math.round((this.goodsDetail.price / this.goodsDetail.originalPrice) * 10)
@@ -143,12 +150,10 @@ export default {
 			this.recommendList = mockGoodsList.filter(item => item.id !== this.goodsId).slice(0, 4)
 		},
 		checkFavoriteStatus() {
-			const favoriteList = storage.getStorage(storage.STORAGE_KEYS.FAVORITE) || []
-			this.isFavorite = favoriteList.includes(this.goodsId)
+			this.isFavorite = isFavorite(this.goodsId)
 		},
 		loadCartCount() {
-			const cartList = storage.getStorage(storage.STORAGE_KEYS.CART) || []
-			this.cartCount = cartList.length
+			this.cartCount = getCartCount()
 		},
 		previewImage(index) {
 			uni.previewImage({
@@ -163,41 +168,21 @@ export default {
 			})
 		},
 		handleFavorite() {
-			let favoriteList = storage.getStorage(storage.STORAGE_KEYS.FAVORITE) || []
-			if (this.isFavorite) {
-				favoriteList = favoriteList.filter(id => id !== this.goodsId)
-				uni.showToast({
-					title: '已取消收藏',
-					icon: 'none'
-				})
-			} else {
-				favoriteList.push(this.goodsId)
-				uni.showToast({
-					title: '已收藏',
-					icon: 'success'
-				})
-			}
+			toggleFav(this.goodsId)
 			this.isFavorite = !this.isFavorite
-			storage.setStorage(storage.STORAGE_KEYS.FAVORITE, favoriteList)
+			uni.showToast({
+				title: this.isFavorite ? '已收藏' : '已取消收藏',
+				icon: this.isFavorite ? 'success' : 'none'
+			})
 		},
 		handleAddCart() {
-			let cartList = storage.getStorage(storage.STORAGE_KEYS.CART) || []
-			const existItem = cartList.find(item => item.goodsId === this.goodsId)
-			if (existItem) {
-				existItem.quantity++
-			} else {
-				cartList.push({
-					id: Date.now(),
-					goodsId: this.goodsId,
-					title: this.goodsDetail.title,
-					price: this.goodsDetail.price,
-					image: this.goodsDetail.image,
-					quantity: 1,
-					selected: true
-				})
-			}
-			storage.setStorage(storage.STORAGE_KEYS.CART, cartList)
-			this.cartCount = cartList.length
+			addToCart({
+				id: this.goodsId,
+				title: this.goodsDetail.title,
+				price: this.goodsDetail.price,
+				image: this.goodsDetail.image
+			})
+			this.cartCount = getCartCount()
 			uni.showToast({
 				title: '已加入购物车',
 				icon: 'success'
@@ -210,7 +195,7 @@ export default {
 			})
 		},
 		goToCart() {
-			uni.switchTab({
+			uni.navigateTo({
 				url: '/pages/cart/cart'
 			})
 		},

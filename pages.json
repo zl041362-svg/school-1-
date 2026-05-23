@@ -52,7 +52,8 @@
 		{
 			"path": "pages/mypublish/mypublish",
 			"style": {
-				"navigationBarTitleText": "我发布的"
+				"navigationBarTitleText": "我发布的",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

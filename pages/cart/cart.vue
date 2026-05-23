@@ -45,7 +45,7 @@
 			
 			<view v-if="recommendList.length > 0 && cartList.length === 0" class="recommend-section">
 				<view class="section-title">猜你喜欢</view>
-				<scroll-view class="recommend-scroll" scroll-x>
+				<scroll-view class="recommend-scroll" scroll-x :bounces="false">
 					<view class="recommend-list">
 						<view
 							class="recommend-item"
@@ -94,7 +94,7 @@
 					<text class="popup-title">选择优惠券</text>
 					<uni-icons type="close" size="20" color="#999999" @click="closeCouponPopup"></uni-icons>
 				</view>
-				<scroll-view class="coupon-list" scroll-y>
+				<scroll-view class="coupon-list" scroll-y :bounces="false">
 					<view
 						class="coupon-item"
 						v-for="coupon in availableCoupons"

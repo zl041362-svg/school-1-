@@ -42,7 +42,7 @@
 		</view>
 		
 		<view class="category-container">
-			<scroll-view class="category-scroll" scroll-x="true" show-scrollbar="false">
+			<scroll-view class="category-scroll" scroll-x="true" show-scrollbar="false" :bounces="false">
 				<view 
 					class="category-item" 
 					:class="{ active: currentCategoryIndex === index }"
@@ -76,7 +76,7 @@
 				<text class="section-title">🔥 热门推荐</text>
 				<text class="section-more" @click="handleMoreHot">查看更多</text>
 			</view>
-			<scroll-view class="hot-goods-scroll" scroll-x="true" show-scrollbar="false">
+			<scroll-view class="hot-goods-scroll" scroll-x="true" show-scrollbar="false" :bounces="false">
 				<view class="hot-goods-item" v-for="item in hotGoodsList" :key="item.id" @click="goToDetail(item.id)">
 					<image class="hot-goods-image" :src="item.image" mode="aspectFill"></image>
 					<view class="hot-goods-info">
@@ -178,6 +178,8 @@
 <script>
 import { mockNotices, mockBanners, mockCategories, mockGoodsList, mockFAQList, mockHotSearch } from '@/mock/index.js'
 import storage from '@/utils/storage.js'
+import { addToCart } from '@/utils/cart.js'
+import { toggleFavorite as toggleFav } from '@/utils/favorite.js'
 
 export default {
 	data() {
@@ -247,24 +249,21 @@ export default {
 			console.log('Banner changed:', e)
 		},
 		handleBannerClick(banner) {
-			if (banner.link) {
-				if (banner.type === 'goods') {
-					uni.navigateTo({
-						url: banner.link
-					})
-				} else {
-					uni.navigateTo({
-						url: banner.link
-					})
-				}
+			if (banner.link && this.isValidRoute(banner.link)) {
+				uni.navigateTo({
+					url: banner.link
+				})
 			}
 		},
 		handleNoticeClick() {
-			if (this.currentNotice.link) {
+			if (this.currentNotice.link && this.isValidRoute(this.currentNotice.link)) {
 				uni.navigateTo({
 					url: this.currentNotice.link
 				})
 			}
+		},
+		isValidRoute(url) {
+			return /^\/pages\/[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)?(\?.*)?$/.test(url)
 		},
 		handleNoticeClose() {
 			this.showNotice = false
@@ -287,11 +286,11 @@ export default {
 			this.filterGoodsByKeyword(tag)
 		},
 		saveSearchHistory(keyword) {
-			let history = storage.getStorage('search_history') || []
+			let history = storage.getStorage(storage.STORAGE_KEYS.SEARCH_HISTORY) || []
 			history = history.filter(item => item !== keyword)
 			history.unshift(keyword)
 			history = history.slice(0, 10)
-			storage.setStorage('search_history', history)
+			storage.setStorage(storage.STORAGE_KEYS.SEARCH_HISTORY, history)
 		},
 		handleSearchCancel() {
 			this.searchKeyword = ''
@@ -346,23 +345,7 @@ export default {
 			}
 		},
 		handleAddToCart(item) {
-			let cartList = storage.getStorage(storage.STORAGE_KEYS.CART) || []
-			const existingItem = cartList.find(cartItem => cartItem.goodsId === item.id)
-			
-			if (existingItem) {
-				existingItem.quantity += 1
-			} else {
-				cartList.push({
-					goodsId: item.id,
-					title: item.title,
-					image: item.image,
-					price: item.price,
-					quantity: 1,
-					selected: true
-				})
-			}
-			
-			storage.setStorage(storage.STORAGE_KEYS.CART, cartList)
+			addToCart(item)
 			uni.showToast({
 				title: '已加入购物车',
 				icon: 'success'
@@ -375,27 +358,13 @@ export default {
 			})
 		},
 		toggleFavorite(item) {
-			let favoriteList = storage.getStorage(storage.STORAGE_KEYS.FAVORITE) || []
-			const index = favoriteList.indexOf(item.id)
-			
-			if (index !== -1) {
-				favoriteList.splice(index, 1)
-				uni.showToast({
-					title: '已取消收藏',
-					icon: 'none'
-				})
-			} else {
-				favoriteList.push(item.id)
-				uni.showToast({
-					title: '已收藏',
-					icon: 'success'
-				})
-			}
-			
-			storage.setStorage(storage.STORAGE_KEYS.FAVORITE, favoriteList)
-		},
+			toggleFav(item.id)
+			const list = storage.getStorage(storage.STORAGE_KEYS.FAVORITE) || []
+			uni.showToast({
+				title: list.includes(item.id) ? '已收藏' : '已取消收藏',
+				icon: 'none'
 		saveViewHistory(item) {
-			let viewHistory = storage.getStorage('view_history') || []
+			let viewHistory = storage.getStorage(storage.STORAGE_KEYS.VIEW_HISTORY) || []
 			viewHistory = viewHistory.filter(viewItem => viewItem.goodsId !== item.id)
 			viewHistory.unshift({
 				goodsId: item.id,
@@ -405,7 +374,7 @@ export default {
 				viewTime: Date.now()
 			})
 			viewHistory = viewHistory.slice(0, 50)
-			storage.setStorage('view_history', viewHistory)
+			storage.setStorage(storage.STORAGE_KEYS.VIEW_HISTORY, viewHistory)
 		},
 		goToDetail(id) {
 			const item = this.goodsList.find(goods => goods.id === id)
@@ -417,6 +386,8 @@ export default {
 			})
 		},
 		goToFAQ(question) {
+			const id = parseInt(question.id)
+			if (isNaN(id)) return
 			uni.navigateTo({
 				url: `/pages/faq/faq?id=${question.id}`
 			})

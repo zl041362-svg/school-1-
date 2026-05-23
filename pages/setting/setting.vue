@@ -61,7 +61,7 @@
 </template>
 
 <script>
-
+import storage from '@/utils/storage.js'
 
 export default {
 	data() {
@@ -147,10 +147,20 @@ export default {
 				content: '确定要退出登录吗？',
 				success: (res) => {
 					if (res.confirm) {
+						storage.removeStorage(storage.STORAGE_KEYS.TOKEN)
+						storage.removeStorage(storage.STORAGE_KEYS.USER_INFO)
+						storage.removeStorage(storage.STORAGE_KEYS.CART)
+						storage.removeStorage(storage.STORAGE_KEYS.FAVORITE)
+						storage.removeStorage(storage.STORAGE_KEYS.NOTICE_CLOSED)
 						uni.showToast({
 							title: '已退出登录',
 							icon: 'success'
 						})
+						setTimeout(() => {
+							uni.reLaunch({
+								url: '/pages/index/index'
+							})
+						}, 1500)
 					}
 				}
 			})

@@ -70,11 +70,12 @@
 
 <script>
 import { mockUserInfo } from '@/mock/index.js'
+import storage from '@/utils/storage.js'
 
 export default {
 	data() {
 		return {
-			userInfo: {}
+			userInfo: mockUserInfo
 		}
 	},
 	onLoad() {
@@ -85,7 +86,8 @@ export default {
 	},
 	methods: {
 		loadUserInfo() {
-			this.userInfo = mockUserInfo
+			const saved = storage.getStorage(storage.STORAGE_KEYS.USER_INFO)
+			this.userInfo = saved || mockUserInfo
 		},
 		goToProfile() {
 			uni.navigateTo({

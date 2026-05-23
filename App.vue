@@ -276,6 +276,55 @@
 		font-size: 28rpx;
 	}
 	
+	/* 筛选标签栏 */
+	.filter-tabs {
+		display: flex;
+		background-color: #FFFFFF;
+		padding: 20rpx;
+		margin-bottom: 20rpx;
+		
+		.filter-tab {
+			flex: 1;
+			text-align: center;
+			font-size: 26rpx;
+			color: #666666;
+			padding: 10rpx 0;
+			position: relative;
+			min-height: 48rpx;
+			
+			&.active {
+				color: #4CAF50;
+				font-weight: bold;
+				
+				&::after {
+					content: '';
+					position: absolute;
+					bottom: 0;
+					left: 50%;
+					transform: translateX(-50%);
+					width: 40rpx;
+					height: 4rpx;
+					background-color: #4CAF50;
+					border-radius: 2rpx;
+				}
+			}
+		}
+	}
+	
+	/* loading 状态 */
+	.loading-state {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 200rpx 40rpx;
+		
+		.loading-text {
+			font-size: 28rpx;
+			color: #999999;
+		}
+	}
+	
 	/* 页面过渡动画 */
 	.page-enter-active {
 		transition: opacity 0.3s, transform 0.3s;

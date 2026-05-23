@@ -1,3 +1,5 @@
+import storage from '@/utils/storage.js'
+
 const BASE_URL = 'https://api.example.com'
 const TIMEOUT = 10000
 
@@ -9,7 +11,7 @@ const request = (options) => {
 			data: options.data || {},
 			header: {
 				'Content-Type': 'application/json',
-				'Authorization': uni.getStorageSync('token') || ''
+				'Authorization': uni.getStorageSync(storage.STORAGE_KEYS.TOKEN) || ''
 			},
 			timeout: TIMEOUT,
 			success: (res) => {

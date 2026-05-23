@@ -144,12 +144,15 @@ export default {
 	},
 	methods: {
 		loadOrderList() {
-			const userOrderList = storage.getStorage('user_order_list') || []
+			const userOrderList = storage.getStorage(storage.STORAGE_KEYS.ORDER_LIST) || []
+			const userIds = userOrderList.map(o => o.id)
 			
 			if (this.currentTab === 0) {
-				this.orderList = [...mockOrderList.bought, ...userOrderList.filter(o => o.type === 'bought')]
+				const mockBought = mockOrderList.bought.filter(o => !userIds.includes(o.id))
+				this.orderList = [...mockBought, ...userOrderList.filter(o => o.type === 'bought')]
 			} else if (this.currentTab === 1) {
-				this.orderList = [...mockOrderList.sold, ...userOrderList.filter(o => o.type === 'sold')]
+				const mockSold = mockOrderList.sold.filter(o => !userIds.includes(o.id))
+				this.orderList = [...mockSold, ...userOrderList.filter(o => o.type === 'sold')]
 			}
 		},
 		handleTabChange(e) {
@@ -238,7 +241,7 @@ export default {
 			})
 		},
 		saveOrderList() {
-			const userOrderList = storage.getStorage('user_order_list') || []
+			const userOrderList = storage.getStorage(storage.STORAGE_KEYS.ORDER_LIST) || []
 			const existingIds = userOrderList.map(o => o.id)
 			
 			this.orderList.forEach(item => {
@@ -259,7 +262,7 @@ export default {
 				}
 			})
 			
-			storage.setStorage('user_order_list', userOrderList)
+			storage.setStorage(storage.STORAGE_KEYS.ORDER_LIST, userOrderList)
 		},
 		goToDetail(item) {
 			uni.navigateTo({

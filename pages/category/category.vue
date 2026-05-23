@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="category-section">
-			<scroll-view class="category-sidebar" scroll-y>
+			<scroll-view class="category-sidebar" scroll-y :bounces="false">
 				<view
 					class="category-item"
 					:class="{ active: currentCategoryIndex === index }"
@@ -12,7 +12,7 @@
 					{{ item.name }}
 				</view>
 			</scroll-view>
-			<scroll-view class="category-content" scroll-y>
+			<scroll-view class="category-content" scroll-y :bounces="false">
 				<view class="goods-grid">
 					<view
 						class="goods-card"

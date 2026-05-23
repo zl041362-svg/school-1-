@@ -188,7 +188,7 @@ export default {
 		loadPublishedList() {
 			this.isLoading = true
 			const userId = 1
-			const userGoodsList = storage.getStorage('user_goods_list') || []
+			const userGoodsList = storage.getStorage(storage.STORAGE_KEYS.GOODS_LIST) || []
 			
 			const mockUserGoods = mockGoodsList
 				.filter(item => item.seller.id === userId)
@@ -288,18 +288,18 @@ export default {
 			})
 		},
 		updateGoodsStatus(goodsId, status) {
-			const userGoodsList = storage.getStorage('user_goods_list') || []
+			const userGoodsList = storage.getStorage(storage.STORAGE_KEYS.GOODS_LIST) || []
 			const index = userGoodsList.findIndex(item => item.id === goodsId)
 			if (index !== -1) {
 				userGoodsList[index].status = status
 				userGoodsList[index].statusText = status === 'onsale' ? '出售中' : '已下架'
-				storage.setStorage('user_goods_list', userGoodsList)
+				storage.setStorage(storage.STORAGE_KEYS.GOODS_LIST, userGoodsList)
 			}
 		},
 		deleteGoods(goodsId) {
-			const userGoodsList = storage.getStorage('user_goods_list') || []
+			const userGoodsList = storage.getStorage(storage.STORAGE_KEYS.GOODS_LIST) || []
 			const filteredList = userGoodsList.filter(item => item.id !== goodsId)
-			storage.setStorage('user_goods_list', filteredList)
+			storage.setStorage(storage.STORAGE_KEYS.GOODS_LIST, filteredList)
 		},
 		goToPublish() {
 			uni.navigateTo({
