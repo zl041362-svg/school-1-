@@ -5,6 +5,7 @@
 			<view class="user-info">
 				<view class="nickname">{{ userInfo.nickname }}</view>
 				<view class="phone">{{ userInfo.phone }}</view>
+				<text class="auth-badge" :class="authClass">{{ authText }}</text>
 			</view>
 			<view class="credit-section">
 				<text class="credit-label">信誉等级</text>
@@ -77,6 +78,18 @@ export default {
 		return {
 			userInfo: mockUserInfo,
 			messageCount: 0
+		}
+	},
+	computed: {
+		authText() {
+			if (this.userInfo.isAuth === true) return '已认证'
+			if (this.userInfo.isAuth === 'pending') return '审核中'
+			return '未认证'
+		},
+		authClass() {
+			if (this.userInfo.isAuth === true) return 'verified'
+			if (this.userInfo.isAuth === 'pending') return 'pending'
+			return ''
 		}
 	},
 	onLoad() {
@@ -182,6 +195,24 @@ export default {
 		.phone {
 			font-size: 26rpx;
 			color: rgba(255, 255, 255, 0.8);
+		}
+		
+		.auth-badge {
+			display: inline-block;
+			font-size: 22rpx;
+			padding: 2rpx 12rpx;
+			border-radius: 10rpx;
+			margin-top: 10rpx;
+			background-color: rgba(255, 255, 255, 0.3);
+			color: #FFFFFF;
+			
+			&.verified {
+				background-color: rgba(255, 255, 255, 0.3);
+			}
+			
+			&.pending {
+				background-color: rgba(255, 152, 0, 0.5);
+			}
 		}
 	}
 	

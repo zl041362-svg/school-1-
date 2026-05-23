@@ -9,8 +9,8 @@
 				<view class="setting-item" @click="handleCampusAuth">
 					<text class="setting-label">校园认证</text>
 					<view class="setting-value">
-						<text class="auth-status" :class="userInfo.isAuth ? 'success' : 'pending'">
-							{{ userInfo.isAuth ? '已认证' : '未认证' }}
+						<text class="auth-status" :class="authStatusClass">
+							{{ authStatusText }}
 						</text>
 					</view>
 					<uni-icons type="right" size="16" color="#CCCCCC"></uni-icons>
@@ -76,12 +76,25 @@ export default {
 			cacheSize: '12.5MB'
 		}
 	},
+	computed: {
+		authStatusText() {
+			if (this.userInfo.isAuth === true) return '已认证'
+			if (this.userInfo.isAuth === 'pending') return '审核中'
+			return '未认证'
+		},
+		authStatusClass() {
+			if (this.userInfo.isAuth === true) return 'success'
+			if (this.userInfo.isAuth === 'pending') return 'warning'
+			return 'pending'
+		}
+	},
 	onLoad() {
 		this.loadUserInfo()
 	},
 	methods: {
 		loadUserInfo() {
-			this.userInfo.isAuth = true
+			const saved = storage.getStorage(storage.STORAGE_KEYS.USER_INFO)
+			this.userInfo.isAuth = saved ? saved.isAuth || false : false
 		},
 		goToProfile() {
 			uni.navigateTo({
@@ -89,9 +102,21 @@ export default {
 			})
 		},
 		handleCampusAuth() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			uni.showModal({
+				title: '校园认证',
+				editable: true,
+				placeholderText: '请输入学号',
+				content: '请填写以下信息完成校园身份认证',
+				success: (res) => {
+					if (res.confirm && res.content) {
+						const userInfo = storage.getStorage(storage.STORAGE_KEYS.USER_INFO) || {}
+						userInfo.isAuth = 'pending'
+						userInfo.studentId = res.content
+						storage.setStorage(storage.STORAGE_KEYS.USER_INFO, userInfo)
+						this.userInfo.isAuth = 'pending'
+						uni.showToast({ title: '已提交认证申请', icon: 'success' })
+					}
+				}
 			})
 		},
 		handleMessageChange(e) {
@@ -129,9 +154,22 @@ export default {
 			})
 		},
 		handleFeedback() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			uni.showModal({
+				title: '意见反馈',
+				editable: true,
+				placeholderText: '请描述您遇到的问题或建议',
+				success: (res) => {
+					if (res.confirm && res.content && res.content.trim()) {
+						const feedbackList = storage.getStorage('feedback_list') || []
+						feedbackList.unshift({
+							id: Date.now(),
+							content: res.content.trim(),
+							time: Date.now()
+						})
+						storage.setStorage('feedback_list', feedbackList)
+						uni.showToast({ title: '感谢您的反馈', icon: 'success' })
+					}
+				}
 			})
 		},
 		handleContact() {
@@ -226,11 +264,16 @@ export default {
 					background-color: rgba(76, 175, 80, 0.1);
 				}
 				
-				&.pending {
-					color: #FF9800;
-					background-color: rgba(255, 152, 0, 0.1);
-				}
+			&.pending {
+				color: #FF9800;
+				background-color: rgba(255, 152, 0, 0.1);
 			}
+			
+			&.warning {
+				color: #FF9800;
+				background-color: rgba(255, 152, 0, 0.1);
+			}
+		}
 		}
 	}
 }

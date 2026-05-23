@@ -157,6 +157,7 @@
 <script>
 import { mockCartList, mockGoodsList } from '@/mock/index.js'
 import storage from '@/utils/storage.js'
+import { createOrder } from '@/utils/order.js'
 
 export default {
 	data() {
@@ -328,25 +329,28 @@ export default {
 		handleCheckout() {
 			const selectedItems = this.cartList.filter(item => item.selected && !item.invalid)
 			if (selectedItems.length === 0) {
-				uni.showToast({
-					title: '请选择要结算的商品',
-					icon: 'none'
-				})
+				uni.showToast({ title: '请选择要结算的商品', icon: 'none' })
 				return
 			}
-			
 			const hasInvalid = this.cartList.some(item => item.selected && item.invalid)
 			if (hasInvalid) {
-				uni.showToast({
-					title: '请先移除失效商品',
-					icon: 'none'
-				})
+				uni.showToast({ title: '请先移除失效商品', icon: 'none' })
 				return
 			}
-			
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			uni.showModal({
+				title: '确认下单',
+				content: `共 ${selectedItems.length} 件商品，合计 ¥${this.totalPrice.toFixed(2)}，确认下单吗？`,
+				success: (res) => {
+					if (res.confirm) {
+						createOrder(selectedItems)
+						this.cartList = this.cartList.filter(item => !item.selected)
+						this.saveCartList()
+						uni.showToast({ title: '下单成功', icon: 'success' })
+						setTimeout(() => {
+							uni.switchTab({ url: '/pages/trade/trade' })
+						}, 1500)
+					}
+				}
 			})
 		},
 		selectCoupon(coupon) {

@@ -69,10 +69,29 @@ export default {
 			return iconMap[type] || 'notification'
 		},
 		handleAction(item) {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
-			})
+			if (item.type === 'order') {
+				uni.switchTab({
+					url: '/pages/trade/trade'
+				})
+			} else if (item.type === 'chat') {
+				uni.showModal({
+					title: '回复消息',
+					editable: true,
+					placeholderText: '输入回复内容',
+					content: item.content,
+					success: (res) => {
+						if (res.confirm && res.content) {
+							uni.showToast({ title: '已回复', icon: 'success' })
+						}
+					}
+				})
+			} else {
+				const messages = this.messageList.map(m =>
+					m.id === item.id ? { ...m, read: true } : m
+				)
+				this.messageList = messages
+				uni.showToast({ title: '已标记为已读', icon: 'none' })
+			}
 		},
 		formatTime(timestamp) {
 			return common.formatDate(timestamp, 'MM-DD HH:mm')

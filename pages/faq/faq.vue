@@ -65,9 +65,22 @@ export default {
 			})
 		},
 		handleFeedback() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			uni.showModal({
+				title: '意见反馈',
+				editable: true,
+				placeholderText: '请描述您遇到的问题或建议',
+				success: (res) => {
+					if (res.confirm && res.content && res.content.trim()) {
+						const feedbackList = uni.getStorageSync('feedback_list') || []
+						feedbackList.unshift({
+							id: Date.now(),
+							content: res.content.trim(),
+							time: Date.now()
+						})
+						uni.setStorageSync('feedback_list', feedbackList)
+						uni.showToast({ title: '感谢您的反馈', icon: 'success' })
+					}
+				}
 			})
 		}
 	}

@@ -25,6 +25,42 @@
 		<view class="add-btn-container">
 			<button class="add-btn btn btn-primary btn-lg" @click="handleAdd">添加新地址</button>
 		</view>
+		
+		<view class="form-overlay" v-if="showForm" @click="closeForm">
+			<view class="form-card" @click.stop>
+				<view class="form-header">
+					<text class="form-title">{{ isEditing ? '编辑地址' : '新增地址' }}</text>
+					<uni-icons type="close" size="20" color="#999" @click="closeForm"></uni-icons>
+				</view>
+				<view class="form-body">
+					<view class="form-item">
+						<text class="form-label">收货人</text>
+						<input class="form-input" v-model="formData.name" placeholder="请输入收货人姓名" />
+					</view>
+					<view class="form-item">
+						<text class="form-label">手机号</text>
+						<input class="form-input" v-model="formData.phone" type="number" placeholder="请输入手机号" />
+					</view>
+					<view class="form-item">
+						<text class="form-label">省/市/区</text>
+						<input class="form-input" v-model="formData.province" placeholder="省份" style="width:30%" />
+						<input class="form-input" v-model="formData.city" placeholder="城市" style="width:30%;margin-left:10rpx" />
+						<input class="form-input" v-model="formData.district" placeholder="区县" style="width:30%;margin-left:10rpx" />
+					</view>
+					<view class="form-item">
+						<text class="form-label">详细地址</text>
+						<input class="form-input" v-model="formData.detail" placeholder="街道/楼栋/门牌号" />
+					</view>
+					<view class="form-item">
+						<text class="form-label">设为默认</text>
+						<switch :checked="formData.isDefault" @change="e => formData.isDefault = e.detail.value" color="#4CAF50" />
+					</view>
+				</view>
+				<view class="form-footer">
+					<button class="btn btn-primary" @click="handleFormSubmit">保存</button>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -34,7 +70,19 @@ import storage from '@/utils/storage.js'
 export default {
 	data() {
 		return {
-			addressList: []
+			addressList: [],
+			showForm: false,
+			isEditing: false,
+			editId: null,
+			formData: {
+				name: '',
+				phone: '',
+				province: '',
+				city: '',
+				district: '',
+				detail: '',
+				isDefault: false
+			}
 		}
 	},
 	onLoad() {
@@ -60,11 +108,54 @@ export default {
 				]
 			}
 		},
+		resetForm() {
+			this.formData = { name: '', phone: '', province: '', city: '', district: '', detail: '', isDefault: false }
+			this.editId = null
+		},
+		openForm(item) {
+			if (item) {
+				this.isEditing = true
+				this.editId = item.id
+				this.formData = { ...item }
+			} else {
+				this.isEditing = false
+				this.resetForm()
+			}
+			this.showForm = true
+		},
+		closeForm() {
+			this.showForm = false
+		},
 		handleEdit(item) {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
-			})
+			this.openForm(item)
+		},
+		handleAdd() {
+			this.openForm(null)
+		},
+		handleFormSubmit() {
+			if (!this.formData.name.trim()) {
+				uni.showToast({ title: '请输入收货人姓名', icon: 'none' })
+				return
+			}
+			if (!this.formData.phone.trim()) {
+				uni.showToast({ title: '请输入手机号', icon: 'none' })
+				return
+			}
+			if (this.formData.isDefault) {
+				this.addressList.forEach(item => item.isDefault = false)
+			}
+			if (this.isEditing) {
+				const index = this.addressList.findIndex(item => item.id === this.editId)
+				if (index !== -1) {
+					this.addressList[index] = { ...this.formData, id: this.editId }
+				}
+			} else {
+				const newId = this.addressList.length > 0 ? Math.max(...this.addressList.map(a => a.id)) + 1 : 1
+				this.addressList.unshift({ ...this.formData, id: newId })
+			}
+			storage.setStorage(storage.STORAGE_KEYS.ADDRESS, this.addressList)
+			this.closeForm()
+			uni.showToast({ title: this.isEditing ? '修改成功' : '添加成功', icon: 'success' })
 		},
 		handleDelete(id) {
 			uni.showModal({
@@ -74,18 +165,9 @@ export default {
 					if (res.confirm) {
 						this.addressList = this.addressList.filter(item => item.id !== id)
 						storage.setStorage(storage.STORAGE_KEYS.ADDRESS, this.addressList)
-						uni.showToast({
-							title: '删除成功',
-							icon: 'success'
-						})
+						uni.showToast({ title: '删除成功', icon: 'success' })
 					}
 				}
-			})
-		},
-		handleAdd() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
 			})
 		}
 	}
@@ -135,7 +217,6 @@ export default {
 				font-size: 22rpx;
 				border-radius: 4rpx;
 			}
-			}
 			
 			.address-actions {
 				display: flex;
@@ -168,6 +249,73 @@ export default {
 	.add-btn {
 		width: 100%;
 		border-radius: 40rpx;
+	}
+}
+
+.form-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 999;
+	display: flex;
+	align-items: flex-end;
+	
+	.form-card {
+		width: 100%;
+		background-color: #FFFFFF;
+		border-radius: 20rpx 20rpx 0 0;
+		max-height: 80vh;
+		overflow-y: auto;
+		
+		.form-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 30rpx;
+			border-bottom: 1rpx solid #EEEEEE;
+			
+			.form-title {
+				font-size: 32rpx;
+				color: #333;
+				font-weight: bold;
+			}
+		}
+		
+		.form-body {
+			padding: 20rpx 30rpx;
+			
+			.form-item {
+				display: flex;
+				align-items: center;
+				padding: 20rpx 0;
+				border-bottom: 1rpx solid #F5F5F5;
+				
+				.form-label {
+					width: 140rpx;
+					font-size: 28rpx;
+					color: #333;
+				}
+				
+				.form-input {
+					flex: 1;
+					font-size: 28rpx;
+					color: #333;
+				}
+			}
+		}
+		
+		.form-footer {
+			padding: 20rpx 30rpx;
+			padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+			
+			.btn {
+				width: 100%;
+				border-radius: 40rpx;
+			}
+		}
 	}
 }
 </style>

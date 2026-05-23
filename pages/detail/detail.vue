@@ -102,6 +102,7 @@ import { mockGoodsList } from '@/mock/index.js'
 import storage from '@/utils/storage.js'
 import { addToCart, getCartCount } from '@/utils/cart.js'
 import { isFavorite, toggleFavorite as toggleFav } from '@/utils/favorite.js'
+import { createOrder } from '@/utils/order.js'
 
 export default {
 	data() {
@@ -189,9 +190,24 @@ export default {
 			})
 		},
 		handleBuyNow() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			uni.showModal({
+				title: '立即购买',
+				content: `确定要购买 "${this.goodsDetail.title}" 吗？\n¥${this.goodsDetail.price.toFixed(2)}`,
+				success: (res) => {
+					if (res.confirm) {
+						createOrder([{
+							goodsId: this.goodsId,
+							title: this.goodsDetail.title,
+							price: this.goodsDetail.price,
+							image: this.goodsDetail.image,
+							quantity: 1
+						}])
+						uni.showToast({ title: '下单成功', icon: 'success' })
+						setTimeout(() => {
+							uni.switchTab({ url: '/pages/trade/trade' })
+						}, 1500)
+					}
+				}
 			})
 		},
 		goToCart() {

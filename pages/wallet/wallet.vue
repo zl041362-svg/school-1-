@@ -33,6 +33,7 @@
 <script>
 import { mockUserInfo } from '@/mock/index.js'
 import common from '@/utils/common.js'
+import storage from '@/utils/storage.js'
 
 export default {
 	data() {
@@ -40,45 +41,85 @@ export default {
 			walletInfo: {
 				balance: 158.50
 			},
-			transactionList: [
-				{
-					id: 1,
-					title: '出售商品收入',
-					amount: 3200.00,
-					type: 'income',
-					time: Date.now() - 86400000 * 5
-				},
-				{
-					id: 2,
-					title: '购买商品支出',
-					amount: 5800.00,
-					type: 'expense',
-					time: Date.now() - 86400000 * 3
-				},
-				{
-					id: 3,
-					title: '出售商品收入',
-					amount: 25.00,
-					type: 'income',
-					time: Date.now() - 86400000
-				}
-			]
+			transactionList: []
 		}
 	},
 	onLoad() {
-		this.walletInfo.balance = mockUserInfo.balance
+		this.loadWallet()
+	},
+	onShow() {
+		this.loadWallet()
 	},
 	methods: {
+		loadWallet() {
+			const saved = storage.getStorage('wallet_data')
+			if (saved) {
+				this.walletInfo = { balance: saved.balance || 0 }
+				this.transactionList = saved.transactions || []
+			} else {
+				this.walletInfo.balance = mockUserInfo.balance
+				this.transactionList = [
+					{ id: 1, title: '出售商品收入', amount: 3200.00, type: 'income', time: Date.now() - 86400000 * 5 },
+					{ id: 2, title: '购买商品支出', amount: 5800.00, type: 'expense', time: Date.now() - 86400000 * 3 },
+					{ id: 3, title: '出售商品收入', amount: 25.00, type: 'income', time: Date.now() - 86400000 }
+				]
+			}
+		},
+		saveWallet() {
+			storage.setStorage('wallet_data', {
+				balance: this.walletInfo.balance,
+				transactions: this.transactionList
+			})
+		},
 		handleWithdraw() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			uni.showModal({
+				title: '余额提现',
+				editable: true,
+				placeholderText: '请输入提现金额',
+				content: `当前可用余额 ¥${this.walletInfo.balance.toFixed(2)}`,
+				success: (res) => {
+					if (!res.confirm || !res.content) return
+					const amount = parseFloat(res.content)
+					if (isNaN(amount) || amount <= 0) {
+						uni.showToast({ title: '请输入有效金额', icon: 'none' })
+						return
+					}
+					if (amount > this.walletInfo.balance) {
+						uni.showToast({ title: '余额不足', icon: 'none' })
+						return
+					}
+					this.walletInfo.balance -= amount
+					this.transactionList.unshift({
+						id: Date.now(),
+						title: '余额提现',
+						amount,
+						type: 'expense',
+						time: Date.now()
+					})
+					this.saveWallet()
+					uni.showToast({ title: `已提现 ¥${amount.toFixed(2)}`, icon: 'success' })
+				}
 			})
 		},
 		handleRecharge() {
-			uni.showToast({
-				title: '功能开发中',
-				icon: 'none'
+			const amounts = [50, 100, 200, 500]
+			uni.showActionSheet({
+				title: '选择充值金额',
+				itemList: amounts.map(a => `¥${a}`),
+				success: (res) => {
+					const amount = amounts[res.tapIndex]
+					if (!amount) return
+					this.walletInfo.balance += amount
+					this.transactionList.unshift({
+						id: Date.now(),
+						title: '钱包充值',
+						amount,
+						type: 'income',
+						time: Date.now()
+					})
+					this.saveWallet()
+					uni.showToast({ title: `已充值 ¥${amount}`, icon: 'success' })
+				}
 			})
 		},
 		formatTime(timestamp) {
