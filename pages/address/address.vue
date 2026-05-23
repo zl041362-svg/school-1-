@@ -210,12 +210,13 @@ export default {
 					margin-right: 15rpx;
 				}
 				
-			.default-tag {
-				padding: 2rpx 8rpx;
-				background-color: #FF5722;
-				color: #FFFFFF;
-				font-size: 22rpx;
-				border-radius: 4rpx;
+				.default-tag {
+					padding: 2rpx 8rpx;
+					background-color: #FF5722;
+					color: #FFFFFF;
+					font-size: 22rpx;
+					border-radius: 4rpx;
+				}
 			}
 			
 			.address-actions {
@@ -279,7 +280,7 @@ export default {
 			
 			.form-title {
 				font-size: 32rpx;
-				color: #333;
+				color: #333333;
 				font-weight: bold;
 			}
 		}
@@ -296,13 +297,13 @@ export default {
 				.form-label {
 					width: 140rpx;
 					font-size: 28rpx;
-					color: #333;
+					color: #333333;
 				}
 				
 				.form-input {
 					flex: 1;
 					font-size: 28rpx;
-					color: #333;
+					color: #333333;
 				}
 			}
 		}
